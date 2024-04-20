@@ -27,6 +27,10 @@ function Interact() {
 }
 
 // The rest of the script is for debugging and can be ignored
+document.getElementById("select_next").onclick = function() {
+    SelectNext();
+}
+
 /*
 
 document.getElementById("scroll_y_down").onclick = function() {
@@ -51,10 +55,6 @@ document.getElementById("zoom_in").onclick = function() {
 
 document.getElementById("zoom_out").onclick = function() {
     Zoom(-document.getElementById("zoom_input").value);
-}
-
-document.getElementById("select_next").onclick = function() {
-    SelectNext();
 }
 
 document.getElementById("select_prev").onclick = function() {

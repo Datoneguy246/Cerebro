@@ -83,6 +83,25 @@ function SelectNextElement() {
         inline: "center"
     });
     console.log(elements[elementCount]);
+
+    // Check if this is an input field
+    stopRecognition();
+    console.log(elements[elementCount].localName);
+    if (elements[elementCount].localName.includes("input")) {
+        console.log("At input... listening");
+        startRecognition((transcript) => {
+            console.log("TRANSCRIPT: " + transcript);
+            elements[elementCount].value = transcript;
+        });
+    } else {
+        console.log("Not at input... listening for keyword");
+        startRecognition((transcript) => {
+            let words = transcript.split(" ");
+            console.log(words);
+            if (words[words.length-1].toLowerCase().includes("enter"))
+                InteractElement();
+        });
+    }
 }
 
 function SelectPreviousElement() {
@@ -100,6 +119,25 @@ function SelectPreviousElement() {
         block: "center",
         inline: "center"
     });
+
+    // Check if this is an input field
+    stopRecognition();
+    console.log(elements[elementCount].localName);
+    if (elements[elementCount].localName.includes("input")) {
+        console.log("At input... listening");
+        startRecognition((transcript) => {
+            console.log("TRANSCRIPT: " + transcript);
+            elements[elementCount].value = transcript;
+        });
+    } else {
+        console.log("Not at input... listening for keyword");
+        startRecognition((transcript) => {
+            let words = transcript.split(" ");
+            console.log(words);
+            if (words[words.length-1].toLowerCase().includes("enter"))
+                InteractElement();
+        });
+    }
 }
 
 function InteractElement() {
@@ -117,4 +155,5 @@ function InteractElement() {
             break;
     }
 }
-alert("Injection");
+
+stopRecognition();
