@@ -1,0 +1,11 @@
+{
+    "name": "Bitcamp 2024",
+    "version": "1.0.0",
+    "description": "",
+    "manifest_version": 3,
+    "author": "Declan Scott, Ryan Shechtman, & Tanay Naik",
+    "action":{
+        "default_popup": "index.html",
+        "default_title": "Bitcamp 2024"
+    }
+}
