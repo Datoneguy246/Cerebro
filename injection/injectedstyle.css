@@ -1,0 +1,7 @@
+.ext_interactable {
+    border: black dashed 1px;
+}
+
+.ext_highlighted {
+    border: red solid 3px !important;
+}
