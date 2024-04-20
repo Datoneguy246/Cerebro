@@ -11,11 +11,9 @@ canvas, video {
     height: 100%;
 }
 
-video {
-    width: 90%;
-    height: 90%;
-    transform: translateX(17px) translateY(0px);
-  }
+.video_hidden {
+    display: none;
+}
 
 .switch {
     position: relative;
