@@ -1,6 +1,6 @@
 body, html {
-    height: 400px;
-    width: 400px;
+    height: 500px;
+    width: 500px;
     background-color: black;
     color: whitesmoke;
 }
@@ -11,17 +11,27 @@ canvas, video {
     height: 100%;
 }
 
+video {
+    width: 90%;
+    height: 90%;
+    transform: translateX(17px) translateY(0px);
+  }
+
 .switch {
     position: relative;
     display: inline-block;
     width: 60px;
     height: 34px;
-  }
+    transform: translateX(210px) translateY(410px);
+  }  
   
   .switch input { 
+    position: aboslute;
     opacity: 0;
-    width: 0;
-    height: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* Ensures the input is above the slider */
+    cursor: pointer; /* Shows a pointer cursor when hovering over the input */
   }
   
   .slider {
@@ -67,6 +77,10 @@ canvas, video {
   
   .slider.round:before {
     border-radius: 50%;
+  }
+  p, features {
+
+    transform: translateX(20px) translateY(-60px);
   }
 
 /*
