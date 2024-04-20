@@ -7,14 +7,17 @@ Promise.all([
 ]).then(startVideo)
 
 function startVideo() {
+    console.log("Attempting to start stream...");
     navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-        const video = document.getElementById('video');
-        video.srcObject = stream;
-    })
-    .catch(err => console.error(err));
+        .then(stream => {
+            console.log(stream);
+            video.srcObject = stream;
+        })
+        .catch(error => {
+            // Handle error or permission denial
+            console.error("Error obtaining camera stream in background script:", error);
+        });
 }
-
 video.addEventListener('play', () => {
     const canvas = document.getElementById('c1')
     document.body.append(canvas)

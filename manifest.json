@@ -10,7 +10,8 @@
     },
     "permissions": [
         "tabs",
-        "activeTab"
+        "activeTab",
+        "storage"
     ],
     "background": {
         "service_worker": "background.js"
@@ -21,5 +22,9 @@
           "js": ["injection/tabinject.js"],
           "css": ["injection/injectedstyle.css"]
         }
-    ]
+    ],
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self';"
+    },
+    "options_page": "options/options.html"
 }
