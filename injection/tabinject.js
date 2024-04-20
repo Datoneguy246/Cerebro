@@ -56,7 +56,7 @@ function Zoom(delta) {
 }
 
 // Get reference to all interactable components on this webpage
-const rawElements = document.querySelectorAll('a, input');
+const rawElements = document.querySelectorAll('a, input, button');
 const elements = [];
 rawElements.forEach((element) => {
     if (element.style.display !== "none" && element.getAttribute("type") !== "hidden") {
@@ -107,6 +107,9 @@ function InteractElement() {
     let toInteract = elements[elementCount];
     switch (toInteract.localName) {
         case "a":
+            toInteract.click();
+            break;
+        case "button":
             toInteract.click();
             break;
         default:
