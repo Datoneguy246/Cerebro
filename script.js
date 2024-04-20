@@ -6,11 +6,13 @@ Promise.all([
     faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
 ]).then(startVideo)
 
+function scrollXOn() {
+    return document.body.scrollWidth > document.documentElement.clientWidth;
+}
+
 function startVideo() {
-    console.log("Attempting to start stream...");
     navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {
-            console.log(stream);
             video.srcObject = stream;
         })
         .catch(error => {
@@ -18,6 +20,13 @@ function startVideo() {
             console.error("Error obtaining camera stream in background script:", error);
         });
 }
+
+var toggler = document.getElementById('mySwitch');
+let running = true;
+toggler.addEventListener('change', function(){
+    running = !running;
+})
+
 video.addEventListener('play', () => {
     const canvas = document.getElementById('c1')
     document.body.append(canvas)
@@ -27,49 +36,61 @@ video.addEventListener('play', () => {
     const text = [
         'Align your face in a comfortable spot in the frame'
     ];
-    const anchor = { x: 200, y: 200 }
+    const anchor = { x: 10, y: 30 }
     let ogx, ogy
     const mainLoop = async () => {
-        if (!mainphase) {
-            const drawOptions = {
-                anchorPosition: 'TOP_LEFT',
-                backgroundColor: 'rgba(0, 0, 0, 0.5)'
-            };
-            const drawBox = new faceapi.draw.DrawTextField(text, anchor, drawOptions);
-            drawBox.draw(canvas);
-            await delay(3000);
+        if (running) {
+            if (!mainphase) {
+                const drawOptions = {
+                    anchorPosition: 'TOP_LEFT',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    fontSize: 25
+                };
+                const drawBox = new faceapi.draw.DrawTextField(text, anchor, drawOptions);
+                drawBox.draw(canvas);
+                await delay(3000);
+                const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
+                landmarks = detections[0].landmarks
+                ogx = landmarks._positions[54]._x
+                ogy = landmarks._positions[65]._y
+                mainphase = true;
+                return;
+            }
             const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
             landmarks = detections[0].landmarks
-            ogx = landmarks._positions[54]._x
-            ogy = landmarks._positions[65]._y
-            console.log(ogy)
-            mainphase = true;
-            return;
-        }
-        const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
-        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-        landmarks = detections[0].landmarks
-        const xpos = landmarks._positions[54]._x
-        const ypos = landmarks._positions[65]._y
-        console.log("ypos: " + ypos)
-        const box = { x: xpos, y: ypos, width: 25, height: 25 }
-        let drawOptions
-        if (ypos-ogy > 10){
-            drawOptions = {
-                lineWidth: 2,
-                boxColor: "red"
+            const xpos = landmarks._positions[54]._x
+            const ypos = landmarks._positions[65]._y
+            const box = { x: xpos-110, y: ypos-25, width: 25, height: 25 }
+            let drawOptions
+            if (ypos-ogy > 10){
+                drawOptions = {
+                    lineWidth: 2,
+                    boxColor: "red"
+                }
+                ScrollVertically(10)
+            } else if (ypos-ogy < -10){
+                drawOptions = {
+                    lineWidth: 2,
+                    boxColor: "green"
+                }
+                ScrollVertically(-10)
             }
-            ScrollVertically(10)
-        } else if (ypos-ogy < -10){
-            drawOptions = {
-                lineWidth: 2,
-                boxColor: "green"
+    
+            /*
+            if (scrollXOn){
+                console.log("reached")
+                if (xpos-ogx > 8){
+                    ScrollHorizontally(-5)
+                } else if (xpos-ogx < -8){
+                    ScrollHorizontally(5)
+                }
             }
-            ScrollVertically(-10)
+            */
+            
+            const drawBox = new faceapi.draw.DrawBox(box, drawOptions)
+            drawBox.draw(document.getElementById('c1'))
         }
-        
-        const drawBox = new faceapi.draw.DrawBox(box, drawOptions)
-        drawBox.draw(document.getElementById('c1'))
     };
     
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
