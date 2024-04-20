@@ -7,5 +7,19 @@
     "action":{
         "default_popup": "index.html",
         "default_title": "Bitcamp 2024"
-    }
+    },
+    "permissions": [
+        "tabs",
+        "activeTab"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+          "matches": ["<all_urls>"],
+          "js": ["injection/tabinject.js"],
+          "css": ["injection/injectedstyle.css"]
+        }
+    ]
 }

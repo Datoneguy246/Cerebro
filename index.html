@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Bitcamp 2024</title>
+        <link rel="stylesheet" href="./style.css">
+        <title>Bitcamp 2024</title>x
     </head>
     <body>
         <header>
-            <h1>Hello World!</h1>
+            Scroll Delta<input id="scroll_in" type="number"><br>
+            <p id="scroll_y_down">Scroll Down</p>
+            <p id="scroll_y_up">Scroll Up</p>
+            <p id="scroll_left">Scroll Left</p>
+            <p id="scroll_right">Scroll Right</p>
+            <hr>
+            Zoom Delta<input id="zoom_input" type="number"><br>
+            <p id="zoom_in">Zoom In</p>
+            <p id="zoom_out">Zoom Out</p>
+            <hr>
+            <p id="select_next">Select Next</p>
+            <p id="select_prev">Select Prev</p>
+            <p id="interact">Interact</p>
         </header>
+        <script src="./webdriver.js"></script>
     </body>
 </html>
