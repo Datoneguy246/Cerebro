@@ -27,6 +27,8 @@ function Interact() {
 }
 
 // The rest of the script is for debugging and can be ignored
+/*
+
 document.getElementById("scroll_y_down").onclick = function() {
     ScrollVertically(document.getElementById("scroll_in").value);
 }
@@ -62,3 +64,4 @@ document.getElementById("select_prev").onclick = function() {
 document.getElementById("interact").onclick = function() {
     Interact();
 }
+*/

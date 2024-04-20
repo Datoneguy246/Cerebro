@@ -5,3 +5,7 @@ body, html {
     color: whitesmoke;
     overflow: scroll;
 }
+
+canvas {
+    position: absolute;
+}
