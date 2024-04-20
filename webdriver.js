@@ -60,5 +60,5 @@ document.getElementById("select_prev").onclick = function() {
 }
 
 document.getElementById("interact").onclick = function() {
-    Interact()
+    Interact();
 }
