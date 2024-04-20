@@ -12,38 +12,42 @@ function GetCurrentTabId(callback) {
 }
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-    console.log("Recevied message: " + message.action);
-    switch (message.action) {
-        case "scroll_y":
-            GetCurrentTabId(function(foundTabId) {
-                chrome.tabs.sendMessage(foundTabId, { action: 'scroll_y', delta: message.delta});
-            });
-            break;
-        case "scroll_x":
-            GetCurrentTabId(function(foundTabId) {
-                chrome.tabs.sendMessage(foundTabId, { action: 'scroll_x', delta: message.delta});
-            });
-            break;
-        case "zoom":
-            GetCurrentTabId(function(foundTabId) {
-                chrome.tabs.sendMessage(foundTabId, { action: 'zoom', delta: message.delta});
-            });
-            break;
-        case "select_next":
-            GetCurrentTabId(function(foundTabId) {
-                chrome.tabs.sendMessage(foundTabId, { action: 'select_next'});
-            });
-            break;
-        case "select_prev":
-            GetCurrentTabId(function(foundTabId) {
-                chrome.tabs.sendMessage(foundTabId, { action: 'select_prev'});
-            });
-            break;
-        case "interact":
-            GetCurrentTabId(function(foundTabId) {
-                chrome.tabs.sendMessage(foundTabId, { action: 'interact'});
-            });
-            break;
+    if (message.stream) {
+        
+    } else {
+        console.log("Recevied message: " + message.action);
+        switch (message.action) {
+            case "scroll_y":
+                GetCurrentTabId(function(foundTabId) {
+                    chrome.tabs.sendMessage(foundTabId, { action: 'scroll_y', delta: message.delta});
+                });
+                break;
+            case "scroll_x":
+                GetCurrentTabId(function(foundTabId) {
+                    chrome.tabs.sendMessage(foundTabId, { action: 'scroll_x', delta: message.delta});
+                });
+                break;
+            case "zoom":
+                GetCurrentTabId(function(foundTabId) {
+                    chrome.tabs.sendMessage(foundTabId, { action: 'zoom', delta: message.delta});
+                });
+                break;
+            case "select_next":
+                GetCurrentTabId(function(foundTabId) {
+                    chrome.tabs.sendMessage(foundTabId, { action: 'select_next'});
+                });
+                break;
+            case "select_prev":
+                GetCurrentTabId(function(foundTabId) {
+                    chrome.tabs.sendMessage(foundTabId, { action: 'select_prev'});
+                });
+                break;
+            case "interact":
+                GetCurrentTabId(function(foundTabId) {
+                    chrome.tabs.sendMessage(foundTabId, { action: 'interact'});
+                });
+                break;
+        }
     }
 });
 
