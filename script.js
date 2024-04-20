@@ -7,11 +7,12 @@ Promise.all([
 ]).then(startVideo)
 
 function startVideo() {
-    navigator.getUserMedia(
-        { video: {} },
-        stream => video.srcObject = stream,
-        err => console.error(err)
-    )
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+        const video = document.getElementById('video');
+        video.srcObject = stream;
+    })
+    .catch(err => console.error(err));
 }
 
 video.addEventListener('play', () => {
@@ -24,7 +25,8 @@ video.addEventListener('play', () => {
         'Align your face in a comfortable spot in the frame'
     ];
     const anchor = { x: 200, y: 200 }
-    let ogx, ogy
+    let ogx, ogy, ogeyertop, ogeyerbottom
+    let ogset = false;
     const mainLoop = async () => {
         if (!mainphase) {
             const drawOptions = {
@@ -36,9 +38,12 @@ video.addEventListener('play', () => {
             await delay(3000);
             const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
             landmarks = detections[0].landmarks
-            ogx = landmarks._positions[54]._x
-            ogy = landmarks._positions[65]._y
-            console.log(ogy)
+            if (!ogset){
+                ogx = landmarks._positions[54]._x
+                ogy = landmarks._positions[65]._y
+                ogset = true;
+            }
+            
             mainphase = true;
             return;
         }
@@ -47,25 +52,26 @@ video.addEventListener('play', () => {
         landmarks = detections[0].landmarks
         const xpos = landmarks._positions[54]._x
         const ypos = landmarks._positions[65]._y
-        console.log("ypos: " + ypos)
-        const box = { x: xpos, y: ypos, width: 25, height: 25 }
+        //console.log("ypos: " + ypos)
+        const nosebox = { x: xpos, y: ypos, width: 25, height: 25 }
         let drawOptions
         if (ypos-ogy > 10){
             drawOptions = {
                 lineWidth: 2,
                 boxColor: "red"
             }
-            ScrollVertically(10)
+            //ScrollVertically(10)
         } else if (ypos-ogy < -10){
             drawOptions = {
                 lineWidth: 2,
                 boxColor: "green"
             }
-            ScrollVertically(-10)
+            //ScrollVertically(-10)
         }
-        
-        const drawBox = new faceapi.draw.DrawBox(box, drawOptions)
+
+        const drawBox = new faceapi.draw.DrawBox(nosebox, drawOptions)
         drawBox.draw(document.getElementById('c1'))
+
     };
     
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
