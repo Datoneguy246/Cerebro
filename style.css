@@ -11,6 +11,10 @@ canvas, video {
     height: 100%;
 }
 
+.video_hidden {
+    display: none;
+}
+
 .switch {
     position: relative;
     display: inline-block;

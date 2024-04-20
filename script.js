@@ -51,17 +51,17 @@ video.addEventListener('play', () => {
                 await delay(3000);
                 const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
                 landmarks = detections[0].landmarks
-                ogx = landmarks._positions[54]._x
-                ogy = landmarks._positions[65]._y
+                ogx = landmarks._positions[30]._x
+                ogy = landmarks._positions[30]._y
                 mainphase = true;
                 return;
             }
             const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
             landmarks = detections[0].landmarks
-            const xpos = landmarks._positions[54]._x
-            const ypos = landmarks._positions[65]._y
-            const box = { x: xpos-110, y: ypos-25, width: 25, height: 25 }
+            const xpos = landmarks._positions[30]._x
+            const ypos = landmarks._positions[30]._y
+            const box = { x: xpos-80, y: ypos+20, width: 25, height: 25 }
             let drawOptions
             if (ypos-ogy > 10){
                 drawOptions = {
