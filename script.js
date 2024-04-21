@@ -72,8 +72,8 @@ video.addEventListener('play', () => {
             const xpos = landmarks._positions[30]._x
             const ypos = landmarks._positions[30]._y
             const box = {
-                x: xpos - 80,
-                y: ypos + 20,
+                x: xpos + 20,
+                y: ypos - 120,
                 width: 25,
                 height: 25
             }

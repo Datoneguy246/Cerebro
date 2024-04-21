@@ -27,9 +27,9 @@ function Interact() {
 }
 
 // The rest of the script is for debugging and can be ignored
-document.getElementById("select_next").onclick = function() {
-    SelectNext();
-}
+// document.getElementById("select_next").onclick = function() {
+//     SelectNext();
+// }
 
 /*
 
