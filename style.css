@@ -1,6 +1,6 @@
-body, html {
-    height: 500px;
-    width: 500px;
+html, body {
+    height: 400px;
+    width: 400px;
     background-color: black;
     color: whitesmoke;
 }
@@ -11,28 +11,20 @@ canvas, video {
     height: 100%;
 }
 
-.video_hidden {
-    display: none;
-}
-
 .switch {
     position: relative;
     display: inline-block;
     width: 60px;
     height: 34px;
-    transform: translateX(210px) translateY(410px);
-  }  
+}
   
-  .switch input { 
-    position: aboslute;
+.switch input { 
     opacity: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2; /* Ensures the input is above the slider */
-    cursor: pointer; /* Shows a pointer cursor when hovering over the input */
-  }
+    width: 0;
+    height: 0;
+}
   
-  .slider {
+.slider {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -42,9 +34,9 @@ canvas, video {
     background-color: #ccc;
     -webkit-transition: .4s;
     transition: .4s;
-  }
+}
   
-  .slider:before {
+.slider:before {
     position: absolute;
     content: "";
     height: 26px;
@@ -54,48 +46,25 @@ canvas, video {
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
-  }
+}
   
-  input:checked + .slider {
+input:checked + .slider {
     background-color: #2196F3;
-  }
+}
   
-  input:focus + .slider {
+input:focus + .slider {
     box-shadow: 0 0 1px #2196F3;
-  }
+}
   
-  input:checked + .slider:before {
+input:checked + .slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
-  }
-  .slider.round {
+}
+.slider.round {
     border-radius: 34px;
-  }
+}
   
-  .slider.round:before {
+.slider.round:before {
     border-radius: 50%;
-  }
-  p, features {
-
-    transform: translateX(20px) translateY(-60px);
-  }
-
-/*
-body {
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
-body video {
-    position: absolute;
-}
-
-canvas {
-    position: absolute;
-}
-*/

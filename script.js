@@ -1,4 +1,5 @@
 const video = document.getElementById('video')
+const canvas = document.getElementById('c1')
 
 Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
@@ -25,10 +26,16 @@ var toggler = document.getElementById('mySwitch');
 let running = true;
 toggler.addEventListener('change', function(){
     running = !running;
+    video.hidden = !running;
+    canvas.hidden = !running;
+    if (!running) {
+        document.body.style.height = '50px'; // Reduce the height to 50px
+    } else {
+        document.body.style.height = ''; // Reset to default height
+    }
 })
 
 video.addEventListener('play', () => {
-    const canvas = document.getElementById('c1')
     document.body.append(canvas)
     const displaySize = { width: video.width, height: video.height }
     faceapi.matchDimensions(canvas, displaySize)
@@ -90,6 +97,26 @@ video.addEventListener('play', () => {
             
             const drawBox = new faceapi.draw.DrawBox(box, drawOptions)
             drawBox.draw(document.getElementById('c1'))
+
+            const rdist1 = Math.sqrt(((landmarks._positions[38].y) - (landmarks._positions[42].y)) ** 2 + ((landmarks._positions[38].x) - (landmarks._positions[42].x)) ** 2)
+            const rdist2 = Math.sqrt(((landmarks._positions[37].y) - (landmarks._positions[40].y)) ** 2 + ((landmarks._positions[37].x) - (landmarks._positions[40].x)) ** 2)
+            const rdist3 = Math.sqrt(((landmarks._positions[39].y) - (landmarks._positions[41].y)) ** 2 + ((landmarks._positions[39].x) - (landmarks._positions[41].x)) ** 2)
+
+            const RAR = (rdist1 + rdist2) / (2 * rdist3)
+
+            const ldist1 = Math.sqrt(((landmarks._positions[44].y) - (landmarks._positions[48].y)) ** 2 + ((landmarks._positions[44].x) - (landmarks._positions[48].x)) ** 2)
+            const ldist2 = Math.sqrt(((landmarks._positions[43].y) - (landmarks._positions[46].y)) ** 2 + ((landmarks._positions[43].x) - (landmarks._positions[46].x)) ** 2)
+            const ldist3 = Math.sqrt(((landmarks._positions[45].y) - (landmarks._positions[47].y)) ** 2 + ((landmarks._positions[45].x) - (landmarks._positions[47].x)) ** 2)
+
+            const LAR = (rdist1 + rdist2) / (2 * rdist3)
+
+            console.log("LAR:" + LAR)
+            console.log("RAR:" + RAR)
+            if (LAR < 0.2 && RAR > 0.2) {
+                console.log("Left wink")
+            } else if (LAR > 0.2 && RAR < 0.2) {
+                console.log("Right wink")
+            }
         }
     };
     
