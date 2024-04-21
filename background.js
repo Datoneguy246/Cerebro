@@ -82,6 +82,6 @@ chrome.action.onClicked.addListener((tab) => {
         url: 'index.html', // Specify the URL of your extension's page
         type: 'popup', // Choose the window type ('popup' or 'normal')
         width: 500, // Specify the width of the window
-        height: 500 // Specify the height of the window
+        height: 425 // Specify the height of the window
     });
 });
