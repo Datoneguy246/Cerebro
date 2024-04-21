@@ -24,6 +24,19 @@ function startVideo() {
         });
 }
 
+// var toggler = document.getElementById('mySwitch');
+let running = true;
+// toggler.addEventListener('change', function () {
+//     running = !running;
+//     video.hidden = !running;
+//     canvas.hidden = !running;
+//     if (!running) {
+//         document.body.style.height = '50px'; // Reduce the height to 50px
+//     } else {
+//         document.body.style.height = ''; // Reset to default height
+//     }
+// })
+
 video.addEventListener('play', () => {
     document.body.append(canvas)
     const displaySize = {
@@ -32,9 +45,6 @@ video.addEventListener('play', () => {
     }
     faceapi.matchDimensions(canvas, displaySize)
     mainphase = false
-    const text = [
-        'Align your face in a comfortable spot in the frame'
-    ];
     const anchor = {
         x: 10,
         y: 30
@@ -42,48 +52,47 @@ video.addEventListener('play', () => {
     let ogx, ogy
     let landmarks
     const mainLoop = async () => {
-        if (!mainphase) {
-            const drawOptions = {
-                anchorPosition: 'TOP_LEFT',
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                fontSize: 25
-            };
-            const drawBox = new faceapi.draw.DrawTextField(text, anchor, drawOptions);
-            drawBox.draw(canvas);
-            await delay(3000);
+        if (running) {
+            if (!mainphase) {
+                const drawOptions = {
+                    anchorPosition: 'TOP_LEFT',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    fontSize: 25
+                };
+                await delay(3000);
+                const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
+                landmarks = detections[0].landmarks
+                ogx = landmarks._positions[30]._x
+                ogy = landmarks._positions[30]._y
+                ogEyeHeight = Math.abs(landmarks._positions[24].y - landmarks._positions[44].y);
+                mainphase = true;
+                return;
+            }
             const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
             landmarks = detections[0].landmarks
-            ogx = landmarks._positions[30]._x
-            ogy = landmarks._positions[30]._y
-            ogEyeHeight = Math.abs(landmarks._positions[24].y - landmarks._positions[44].y);
-            mainphase = true;
-            return;
-        }
-        const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
-        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-        landmarks = detections[0].landmarks
-        const xpos = landmarks._positions[30]._x
-        const ypos = landmarks._positions[30]._y
-        const box = {
-            x: xpos - 80,
-            y: ypos + 20,
-            width: 25,
-            height: 25
-        }
-        let drawOptions
-        if (ypos - ogy > 10) {
-            drawOptions = {
-                lineWidth: 2,
-                boxColor: "red"
+            const xpos = landmarks._positions[30]._x
+            const ypos = landmarks._positions[30]._y
+            const box = {
+                x: xpos + 20,
+                y: ypos,
+                width: 25,
+                height: 25
             }
-            ScrollVertically(10)
-        } else if (ypos - ogy < -10) {
-            drawOptions = {
-                lineWidth: 2,
-                boxColor: "green"
+            let drawOptions
+            if (ypos - ogy > 10) {
+                drawOptions = {
+                    lineWidth: 2,
+                    boxColor: "red"
+                }
+                ScrollVertically(10)
+            } else if (ypos - ogy < -10) {
+                drawOptions = {
+                    lineWidth: 2,
+                    boxColor: "green"
+                }
+                ScrollVertically(-10)
             }
-            ScrollVertically(-10)
-        }
 
         // const targetHeight = ogEyeHeight * 1.2;
         // let lEyeHeight = Math.abs(landmarks._positions[19].y - landmarks._positions[37].y);
