@@ -50,7 +50,7 @@ video.addEventListener('play', () => {
         y: 30
     }
     let ogx, ogy
-    let ogEyeHeight;
+    let landmarks
     const mainLoop = async () => {
         if (running) {
             if (!mainphase) {
@@ -94,55 +94,60 @@ video.addEventListener('play', () => {
                 ScrollVertically(-10)
             }
 
-            // const targetHeight = ogEyeHeight * 1.2;
-            // let lEyeHeight = Math.abs(landmarks._positions[19].y - landmarks._positions[37].y);
-            // let rEyeHeight = Math.abs(landmarks._positions[24].y - landmarks._positions[44].y);
-            // let avg = (lEyeHeight + rEyeHeight) / 2;
-            // if (avg > targetHeight) {
-            //     SelectNext();
-            // } else if (avg < ogEyeHeight * 0.95) {
-            //     SelectPrev();
-            // }
-            // if (rEyeHeight > targetHeight) {
-            //     SelectPrev();
-            // }
+        // const targetHeight = ogEyeHeight * 1.2;
+        // let lEyeHeight = Math.abs(landmarks._positions[19].y - landmarks._positions[37].y);
+        // let rEyeHeight = Math.abs(landmarks._positions[24].y - landmarks._positions[44].y);
+        // let avg = (lEyeHeight + rEyeHeight) / 2;
+        // if (avg > targetHeight) {
+        //     SelectNext();
+        // } else if (avg < ogEyeHeight * 0.95) {
+        //     SelectPrev();
+        // }
+        // if (rEyeHeight > targetHeight) {
+        //     SelectPrev();
+        // }
 
-            /*
-            if (scrollXOn){
-                console.log("reached")
-                if (xpos-ogx > 8){
-                    ScrollHorizontally(-5)
-                } else if (xpos-ogx < -8){
-                    ScrollHorizontally(5)
-                }
-            }
-            */
-
-            const drawBox = new faceapi.draw.DrawBox(box, drawOptions)
-            drawBox.draw(document.getElementById('c1'))
-
-            const rdist1 = Math.sqrt(((landmarks._positions[38].y) - (landmarks._positions[42].y)) ** 2 + ((landmarks._positions[38].x) - (landmarks._positions[42].x)) ** 2)
-            const rdist2 = Math.sqrt(((landmarks._positions[37].y) - (landmarks._positions[40].y)) ** 2 + ((landmarks._positions[37].x) - (landmarks._positions[40].x)) ** 2)
-            const rdist3 = Math.sqrt(((landmarks._positions[39].y) - (landmarks._positions[41].y)) ** 2 + ((landmarks._positions[39].x) - (landmarks._positions[41].x)) ** 2)
-
-            const RAR = (rdist1 + rdist2) / (2 * rdist3)
-
-            const ldist1 = Math.sqrt(((landmarks._positions[44].y) - (landmarks._positions[48].y)) ** 2 + ((landmarks._positions[44].x) - (landmarks._positions[48].x)) ** 2)
-            const ldist2 = Math.sqrt(((landmarks._positions[43].y) - (landmarks._positions[46].y)) ** 2 + ((landmarks._positions[43].x) - (landmarks._positions[46].x)) ** 2)
-            const ldist3 = Math.sqrt(((landmarks._positions[45].y) - (landmarks._positions[47].y)) ** 2 + ((landmarks._positions[45].x) - (landmarks._positions[47].x)) ** 2)
-
-            const LAR = (rdist1 + rdist2) / (2 * rdist3)
-
-            console.log("LAR:" + LAR)
-            console.log("RAR:" + RAR)
-            if (LAR < 0.2 && RAR > 0.2) {
-                console.log("Left wink")
-            } else if (LAR > 0.2 && RAR < 0.2) {
-                console.log("Right wink")
+        /*
+        if (scrollXOn){
+            console.log("reached")
+            if (xpos-ogx > 8){
+                ScrollHorizontally(-5)
+            } else if (xpos-ogx < -8){
+                ScrollHorizontally(5)
             }
         }
+        */
+
+        const drawBox = new faceapi.draw.DrawBox(box, drawOptions)
+        drawBox.draw(document.getElementById('c1'))
     };
 
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     setInterval(mainLoop, 100);
+
+    setInterval(function() {
+        const rdist1 = faceapi.euclideanDistance([landmarks._positions[38].x, landmarks._positions[38].y,], [landmarks._positions[40].x, landmarks._positions[40].y,])
+        const rdist2 = faceapi.euclideanDistance([landmarks._positions[36].x, landmarks._positions[36].y,], [landmarks._positions[39].x, landmarks._positions[39].y,])
+        const rdist3 = faceapi.euclideanDistance([landmarks._positions[37].x, landmarks._positions[37].y,], [landmarks._positions[41].x, landmarks._positions[41].y,])
+
+        //console.log("r1: " , rdist1)
+        //console.log("r2: " , rdist2)
+        //console.log("r3: " , rdist2)
+
+        const RAR = (rdist1 + rdist3) / (2.0 * rdist2)
+        console.log("RAR: ", RAR)
+        const ldist1 = faceapi.euclideanDistance([landmarks._positions[43].x, landmarks._positions[43].y,], [landmarks._positions[47].x, landmarks._positions[47].y,])
+        const ldist2 = faceapi.euclideanDistance([landmarks._positions[42].x, landmarks._positions[42].y,], [landmarks._positions[45].x, landmarks._positions[45].y,])
+        const ldist3 = faceapi.euclideanDistance([landmarks._positions[44].x, landmarks._positions[44].y,], [landmarks._positions[46].x, landmarks._positions[46].y,])
+
+        const LAR = (ldist1 + ldist3) / (2.0 * ldist2)
+
+        console.log("LAR:" + LAR)
+        if (LAR < 0.285 && RAR > 0.285) {
+            SelectPrev()
+        } else if (LAR > 0.285 && RAR < 0.285) {
+            SelectNext()
+        }
+    }, 500)
+
 })

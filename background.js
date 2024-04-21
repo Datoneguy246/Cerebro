@@ -4,18 +4,18 @@ function GetCurrentTabId(callback) {
         currentWindow: true
     }, function (tabs) {
         // If there are active tabs, call handleTabUpdate with the tab information
-        console.log("Querying to get current tab");
-        console.log(tabs);
+        //console.log("Querying to get current tab");
+        //console.log(tabs);
         if (tabs && tabs.length > 0) {
             let foundTabId = tabs[0].id;
-            console.log("Found tab id: " + foundTabId);
+            //console.log("Found tab id: " + foundTabId);
             callback(foundTabId);
         }
     });
 }
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    console.log("Recevied message: " + message.action);
+    //console.log("Recevied message: " + message.action);
     switch (message.action) {
         case "scroll_y":
             GetCurrentTabId(function (foundTabId) {
