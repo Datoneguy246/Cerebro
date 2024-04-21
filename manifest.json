@@ -5,13 +5,13 @@
     "manifest_version": 3,
     "author": "Declan Scott, Ryan Shechtman, & Tanay Naik",
     "action":{
-        "default_popup": "index.html",
         "default_title": "Bitcamp 2024"
     },
     "permissions": [
         "tabs",
         "activeTab",
-        "storage"
+        "storage",
+        "windows"
     ],
     "background": {
         "service_worker": "background.js"
@@ -19,7 +19,7 @@
     "content_scripts": [
         {
           "matches": ["<all_urls>"],
-          "js": ["injection/tabinject.js"],
+          "js": ["injection/tabinject.js", "injection/speech2text.js"],
           "css": ["injection/injectedstyle.css"]
         }
     ],
