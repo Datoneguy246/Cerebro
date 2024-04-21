@@ -116,6 +116,7 @@ video.addEventListener('play', () => {
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     setInterval(mainLoop, 100);
 
+    let prev = 1.0
     setInterval(function() {
         const rdist1 = faceapi.euclideanDistance([landmarks._positions[38].x, landmarks._positions[38].y,], [landmarks._positions[40].x, landmarks._positions[40].y,])
         const rdist2 = faceapi.euclideanDistance([landmarks._positions[36].x, landmarks._positions[36].y,], [landmarks._positions[39].x, landmarks._positions[39].y,])
@@ -126,19 +127,21 @@ video.addEventListener('play', () => {
         //console.log("r3: " , rdist2)
 
         const RAR = (rdist1 + rdist3) / (2.0 * rdist2)
-        console.log("RAR: ", RAR)
+        //console.log("RAR: ", RAR)
         const ldist1 = faceapi.euclideanDistance([landmarks._positions[43].x, landmarks._positions[43].y,], [landmarks._positions[47].x, landmarks._positions[47].y,])
         const ldist2 = faceapi.euclideanDistance([landmarks._positions[42].x, landmarks._positions[42].y,], [landmarks._positions[45].x, landmarks._positions[45].y,])
         const ldist3 = faceapi.euclideanDistance([landmarks._positions[44].x, landmarks._positions[44].y,], [landmarks._positions[46].x, landmarks._positions[46].y,])
 
         const LAR = (ldist1 + ldist3) / (2.0 * ldist2)
 
-        console.log("LAR:" + LAR)
-        if (LAR < 0.285 && RAR > 0.285) {
-            SelectPrev()
-        } else if (LAR > 0.285 && RAR < 0.285) {
+        //console.log("LAR:" + LAR)
+        console.log ("Ratio: " + LAR/RAR);
+        if (LAR / RAR > 1.023 && prev > 1.023) {
             SelectNext()
+        } else if (LAR / RAR < 1 && prev < 1) {
+            SelectPrev()
         }
-    }, 500)
+        prev = LAR / RAR
+    }, 300)
 
 })
