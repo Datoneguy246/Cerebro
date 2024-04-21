@@ -1,5 +1,5 @@
 // Listen for messages from the extension
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     console.log(message);
     switch (message.action) {
         case 'scroll_y':
@@ -24,6 +24,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 });
 
 const SCROLL_FACTOR = 5;
+
 function ScrollVertically(delta) {
     window.scrollBy({
         top: delta * SCROLL_FACTOR,
@@ -42,6 +43,7 @@ function ScrollHorizontally(delta) {
 
 const ZOOM_FACTOR = 0.5;
 let currentZoom = 1;
+
 function Zoom(delta) {
     var zoomIncrease = delta * ZOOM_FACTOR;
     currentZoom += zoomIncrease;
@@ -67,14 +69,14 @@ rawElements.forEach((element) => {
 console.log(elements);
 
 let elementCount = 0;
+
 function SelectNextElement() {
-    if (elements[elementCount] != null)
-    {
+    if (elements[elementCount] != null) {
         elements[elementCount].classList.remove("ext_highlighted");
         elements[elementCount].classList.add("ext_interactable");
     }
 
-    elementCount = Math.min(elementCount + 1, elements.length-1);
+    elementCount = Math.min(elementCount + 1, elements.length - 1);
     elements[elementCount].classList.remove("ext_interactable");
     elements[elementCount].classList.add("ext_highlighted");
     elements[elementCount].scrollIntoView({
@@ -98,15 +100,20 @@ function SelectNextElement() {
         startRecognition((transcript) => {
             let words = transcript.split(" ");
             console.log(words);
-            if (words[words.length-1].toLowerCase().includes("enter"))
+            let lastWord = words[words.length - 1].toLowerCase();
+            if (lastWord.includes("enter"))
                 InteractElement();
+            else if (lastWord.includes("forward")) {
+                window.history.forward();
+            } else if (lastWord.includes("back")) {
+                window.history.back();
+            }
         });
     }
 }
 
 function SelectPreviousElement() {
-    if (elements[elementCount] != null)
-    {
+    if (elements[elementCount] != null) {
         elements[elementCount].classList.remove("ext_highlighted");
         elements[elementCount].classList.add("ext_interactable");
     }
@@ -134,8 +141,14 @@ function SelectPreviousElement() {
         startRecognition((transcript) => {
             let words = transcript.split(" ");
             console.log(words);
-            if (words[words.length-1].toLowerCase().includes("enter"))
+            let lastWord = words[words.length - 1].toLowerCase();
+            if (lastWord.includes("enter"))
                 InteractElement();
+            else if (lastWord.includes("forward")) {
+                window.history.forward();
+            } else if (lastWord.includes("back")) {
+                window.history.back();
+            }
         });
     }
 }
